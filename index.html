@@ -1,392 +1,628 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blend Art — студия мультфильмов в Blender</title>
-<meta name="description" content="Blend Art делает 3D-анимацию в Blender. Сейчас создаём полнометражный анимационный фильм по мотивам башкирского эпоса.">
-<meta name="theme-color" content="#000000">
-<meta property="og:title" content="Blend Art — студия мультфильмов в Blender">
-<meta property="og:description" content="Полнометражный анимационный фильм по мотивам башкирского эпоса, созданный в Blender.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ffc21a'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#000;
-  --fg:#f5f5f5;
-  --muted:#9a9a9a;
-  --line:#262626;
-  --yellow:#ffc21a;
-  --display:'Unbounded','Arial Black',system-ui,sans-serif;
-  --text:'Onest',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --pad:clamp(20px,5vw,48px);
-}
-*{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--fg);font:400 1rem/1.6 var(--text);-webkit-font-smoothing:antialiased}
-a{color:inherit}
-:focus-visible{outline:2px solid #fff;outline-offset:4px;border-radius:4px}
-.wrap{width:100%;max-width:1200px;margin:0 auto;padding-inline:var(--pad)}
-section{padding-block:clamp(72px,12vw,140px);scroll-margin-top:0}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blend Art — студия мультфильмов в Blender</title>
+    <meta name="description" content="Студия 3D-анимации Blend Art. Полнометражный мультфильм по мотивам башкирского эпоса в Blender.">
+    <link rel="icon" href="assets/img1.svg" type="image/svg+xml">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ---------- Шапка ---------- */
-.top{display:flex;justify-content:space-between;align-items:center;padding-block:20px;position:relative;z-index:3}
-.logo{display:flex;align-items:center;gap:12px;font:700 1rem/1 var(--display);text-decoration:none;letter-spacing:.01em}
-.logo__box{height:44px;padding:8px 12px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
-.logo__box img{height:100%;width:auto;display:block}
-.nav{display:flex;gap:clamp(16px,3vw,32px)}
-.nav a{color:var(--muted);text-decoration:none;font-size:.95rem;transition:color .2s}
-.nav a:hover{color:#fff}
+        :root {
+            --bg: #0b0b0e;
+            --bg2: #101014;
+            --card: #15151b;
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f2f2f2;
+            --muted: #9a9aa5;
+            --accent: #ffc24b;
+            --accent2: #ff7847;
+        }
 
-/* ---------- Первый экран ---------- */
-.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;position:relative;overflow:hidden}
-.hero__main{flex:1;display:flex;flex-direction:column;justify-content:center;padding-block:clamp(24px,6vh,64px);position:relative;z-index:2}
-h1{font:700 clamp(1.9rem,5.6vw,4.4rem)/1.08 var(--display);letter-spacing:-.01em;max-width:12em}
-.lead{margin-top:20px;max-width:32em;color:var(--muted);font-size:clamp(1rem,1.6vw,1.2rem)}
-.cta{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-top:32px}
-.btn{display:inline-block;background:#fff;color:#000;font-weight:600;padding:14px 26px;border-radius:999px;text-decoration:none;transition:background .2s,color .2s}
-.btn:hover{background:var(--yellow)}
-.btn--ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1px #444}
-.btn--ghost:hover{background:#fff;color:#000}
+        html { scroll-behavior: smooth; }
 
-/* Сцена с героями */
-.stage{position:relative;height:clamp(260px,44vh,440px);border-bottom:1px solid var(--line)}
-.blob{
-  position:absolute;bottom:0;left:var(--x);width:var(--s);
-  transform:translateX(-50%);
-  font-size:var(--s);          /* 1em = размер героя */
-  --start:calc(var(--d) + .8s);
-  z-index:1;
-}
-.blob--yellow{--c1:#ffe680;--c2:#ffc21a;--c3:#b87d00;--glow:rgba(255,194,26,.55);--x:52%;--s:clamp(120px,21vw,270px);--hop:clamp(36px,7vw,90px);--dur:1.7s;--d:.1s}
-.blob--pink{--c1:#ffa3c2;--c2:#ff5c93;--c3:#a82858;--glow:rgba(255,92,147,.55);--x:74%;--s:clamp(90px,15vw,190px);--hop:clamp(46px,9vw,120px);--dur:1.4s;--d:.4s}
-.blob--cyan{--c1:#96e8ff;--c2:#3cbff0;--c3:#16739c;--glow:rgba(60,191,240,.55);--x:90%;--s:clamp(70px,11vw,140px);--hop:clamp(56px,11vw,140px);--dur:1.15s;--d:.7s}
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-/* падение при загрузке */
-.blob__fall{animation:fall .8s cubic-bezier(.5,0,1,.55) var(--d) backwards}
-@keyframes fall{from{transform:translateY(-120vh)}}
+        img { display: block; max-width: 100%; }
 
-/* прыжок */
-.blob__hop{animation:hop var(--dur) var(--start) infinite}
-@keyframes hop{
-  0%,100%{transform:translateY(0);animation-timing-function:cubic-bezier(.1,.7,.3,1)}
-  50%{transform:translateY(calc(var(--hop) * -1));animation-timing-function:cubic-bezier(.7,0,.9,.3)}
-}
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-/* сжатие и растяжение */
-.blob__body{
-  position:relative;width:100%;aspect-ratio:1/.94;
-  border-radius:50% 50% 47% 47%/56% 56% 44% 44%;
-  background:
-    radial-gradient(ellipse 34% 24% at 30% 22%,rgba(255,255,255,.6),transparent 72%),
-    radial-gradient(circle at 36% 30%,var(--c1),var(--c2) 58%,var(--c3));
-  box-shadow:inset -.05em -.07em .14em rgba(0,0,0,.35);
-  transform-origin:50% 100%;
-  animation:squish var(--dur) var(--start) infinite;
-}
-@keyframes squish{
-  0%,100%{transform:scale(1.22,.78)}
-  12%{transform:scale(.93,1.1)}
-  50%{transform:scale(1,1)}
-  88%{transform:scale(.93,1.1)}
-}
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(11, 11, 14, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+        }
 
-/* цветной отсвет на полу */
-.blob__glow{
-  position:absolute;left:50%;bottom:0;width:125%;height:.14em;
-  background:radial-gradient(closest-side,var(--glow),transparent);
-  opacity:0;transform:translate(-50%,50%);
-  animation:glow var(--dur) var(--start) infinite;
-}
-@keyframes glow{
-  0%,100%{opacity:.9;transform:translate(-50%,50%) scale(1)}
-  50%{opacity:.25;transform:translate(-50%,50%) scale(.6)}
-}
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-/* глаза */
-.eyes{position:absolute;left:50%;top:32%;display:flex;gap:.045em;transform:translateX(-50%)}
-.eye{position:relative;width:.17em;height:.22em;border-radius:50%;background:#fff;overflow:hidden;animation:blink 5.5s infinite}
-.blob--pink .eye{animation-delay:1.2s}
-.blob--cyan .eye{animation-delay:2.4s}
-.pupil{
-  position:absolute;left:50%;top:50%;width:.085em;height:.11em;border-radius:50%;background:#111;
-  transform:translate(calc(-50% + var(--px,-.6) * .035em),calc(-50% + var(--py,-.3) * .045em));
-}
-@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+        }
 
-@media (max-width:720px){
-  .blob--yellow{--x:28%}
-  .blob--pink{--x:58%}
-  .blob--cyan{--x:84%}
-}
+        .logo img {
+            height: 40px;
+            width: auto;
+            border-radius: 8px;
+        }
 
-/* ---------- Общие заголовки ---------- */
-h2{font:600 clamp(1.5rem,3.6vw,2.4rem)/1.15 var(--display);letter-spacing:-.005em;max-width:20em}
+        nav { display: flex; gap: 28px; }
 
-/* ---------- Поддержка Фонда ---------- */
-.support{border-bottom:1px solid var(--line);padding-block:32px}
-.support .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:20px 40px}
-.support__logos{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
-.support__logos > *{background:#fff;border-radius:10px;padding:10px 14px;display:flex;align-items:center;min-height:64px}
-.support__logos img{height:80px;width:auto;max-width:100%;display:block}
-.logo-missing{color:#000;font-size:.8rem;border:1px dashed #888;padding:8px 10px;border-radius:6px}
-.support p{flex:1 1 320px;max-width:44em;font-size:.95rem;color:var(--fg)}
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: color 0.25s;
+            position: relative;
+        }
 
-/* ---------- Что мы делаем ---------- */
-.svc{list-style:none;padding:0;margin-top:clamp(32px,5vw,56px)}
-.svc li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 40px;padding-block:28px;border-top:1px solid var(--line)}
-.svc li:last-child{border-bottom:1px solid var(--line)}
-.svc h3{font:500 clamp(1.1rem,2.2vw,1.5rem)/1.25 var(--display)}
-.svc p{color:var(--muted);max-width:32em}
-@media (max-width:720px){.svc li{grid-template-columns:1fr}}
+        nav a:hover { color: var(--accent); }
 
-/* ---------- Работы ---------- */
-.works{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(16px,2.5vw,32px);margin-top:clamp(32px,5vw,56px)}
-.work{display:flex;flex-direction:column;gap:14px}
-.work--lead{grid-row:span 2}
-.work__media{
-  position:relative;flex:1;aspect-ratio:16/9;
-  border:1px solid var(--line);border-radius:14px;overflow:hidden;
-  display:grid;place-items:center;color:var(--muted);font-size:.9rem;
-  transition:border-color .25s;
-}
-.work:hover .work__media{border-color:#555}
-.work--lead .work__media{aspect-ratio:auto;min-height:300px}
-.work__media--a{background:radial-gradient(circle at 25% 75%,rgba(255,194,26,.3),transparent 55%)}
-.work__media--b{background:radial-gradient(circle at 70% 30%,rgba(255,92,147,.28),transparent 55%)}
-.work__media--c{background:radial-gradient(circle at 30% 40%,rgba(60,191,240,.28),transparent 55%)}
-.work h3{font:500 1rem/1.3 var(--display)}
-.work p{color:var(--muted);font-size:.9rem}
-@media (max-width:720px){
-  .works{grid-template-columns:1fr}
-  .work--lead{grid-row:auto}
-  .work--lead .work__media{aspect-ratio:16/9;min-height:0}
-}
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -6px;
+            width: 0; height: 2px;
+            background: var(--accent);
+            transition: width 0.25s;
+        }
 
-/* ---------- Как работаем ---------- */
-.steps{list-style:none;padding:0;margin-top:clamp(32px,5vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:36px 28px}
-.steps li{border-top:1px solid #444;padding-top:18px}
-.steps b{display:block;font:500 .8rem var(--display);color:var(--muted);margin-bottom:14px}
-.steps h3{font:500 1.05rem/1.3 var(--display);margin-bottom:8px}
-.steps p{color:var(--muted);font-size:.95rem}
+        nav a:hover::after { width: 100%; }
 
-/* ---------- Контакты ---------- */
-.contact p{margin-top:16px;color:var(--muted);max-width:32em}
-.contact .cta{margin-top:32px}
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 140px 0 80px;
+            overflow: hidden;
+        }
 
-/* ---------- Подвал ---------- */
-footer{border-top:1px solid var(--line);padding-block:28px;color:var(--muted);font-size:.9rem}
-footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255, 194, 75, 0.18), transparent 70%);
+            top: -100px; right: -150px;
+            pointer-events: none;
+        }
 
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .blob__fall,.blob__hop,.blob__body,.blob__glow,.eye{animation:none}
-  .blob__glow{opacity:.6}
-}
-</style>
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(255, 120, 71, 0.12), transparent 70%);
+            bottom: -150px; left: -100px;
+            pointer-events: none;
+        }
+
+        .hero-content { position: relative; z-index: 2; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border: 1px solid rgba(255, 194, 75, 0.35);
+            background: rgba(255, 194, 75, 0.08);
+            color: var(--accent);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 620px;
+            margin-bottom: 36px;
+        }
+
+        .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #141414;
+            box-shadow: 0 6px 24px rgba(255, 194, 75, 0.25);
+        }
+
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 34px rgba(255, 194, 75, 0.4); }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+
+        .hero-note {
+            margin-top: 48px;
+            padding: 16px 20px;
+            border-left: 3px solid var(--accent);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 0 10px 10px 0;
+            color: var(--muted);
+            font-size: 0.85rem;
+            max-width: 700px;
+        }
+
+        /* ===== SECTIONS ===== */
+        section { padding: 90px 0; }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+            margin-bottom: 48px;
+            max-width: 640px;
+        }
+
+        /* ===== PROJECT ===== */
+        #project { background: var(--bg2); }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .project-image {
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .project-image:hover img { transform: scale(1.04); }
+
+        .project-facts { display: grid; gap: 16px; }
+
+        .fact-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px 24px;
+            transition: all 0.25s;
+        }
+
+        .fact-card:hover { border-color: rgba(255, 194, 75, 0.4); transform: translateX(6px); }
+
+        .fact-card h4 {
+            color: var(--accent);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .fact-card p { color: var(--muted); font-size: 0.95rem; }
+
+        /* ===== SERVICES ===== */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover::before { transform: scaleX(1); }
+
+        .service-card:hover { transform: translateY(-6px); border-color: rgba(255, 194, 75, 0.3); }
+
+        .service-icon { font-size: 2.4rem; margin-bottom: 16px; }
+
+        .service-card h3 { font-size: 1.25rem; margin-bottom: 10px; }
+
+        .service-card p { color: var(--muted); font-size: 0.95rem; }
+
+        /* ===== WORKS / GALLERY ===== */
+        #works { background: var(--bg2); }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 24px;
+        }
+
+        .work-item {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--card);
+        }
+
+        .work-item:first-child { grid-row: span 2; }
+
+        .work-item img {
+            width: 100%;
+            height: 100%;
+            min-height: 260px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .work-item:first-child img { min-height: 560px; }
+
+        .work-item:hover img { transform: scale(1.05); }
+
+        .work-caption {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            padding: 40px 24px 20px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+        }
+
+        .work-caption h3 { font-size: 1.2rem; margin-bottom: 2px; }
+
+        .work-caption p { color: var(--muted); font-size: 0.9rem; }
+
+        /* ===== PIPELINE ===== */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            counter-reset: step;
+        }
+
+        .step-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 30px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .step-card:hover { transform: translateY(-6px); border-color: rgba(255, 194, 75, 0.35); }
+
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px; height: 46px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #141414;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 18px;
+        }
+
+        .step-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
+
+        .step-card p { color: var(--muted); font-size: 0.93rem; }
+
+        /* ===== CONTACT ===== */
+        .contact-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-box::before {
+            content: '';
+            position: absolute;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255, 194, 75, 0.12), transparent 70%);
+            top: -200px; left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        .contact-box h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: 14px; position: relative; }
+
+        .contact-box p { color: var(--muted); max-width: 520px; margin: 0 auto 36px; position: relative; }
+
+        .contact-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+        /* ===== FOOTER ===== */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .project-grid { grid-template-columns: 1fr; }
+            .works-grid { grid-template-columns: 1fr; }
+            .work-item:first-child { grid-row: auto; }
+            .work-item:first-child img { min-height: 340px; }
+            nav { gap: 16px; }
+        }
+
+        @media (max-width: 560px) {
+            nav { display: none; }
+            .hero { padding-top: 110px; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="hero">
-  <header class="wrap top">
-  <a class="logo" href="#">
-    <span class="logo__box"><img src="assets/logo-blendart.png" alt="Blend Art"></span>
-  </a>
-    <nav class="nav" aria-label="Разделы">
-      <a href="#project">Проект</a>
-      <a href="#works">Работы</a>
-      <a href="#contact">Контакты</a>
-    </nav>
-  </header>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <img src="assets/logo-blendart.png" alt="Blend Art лого">
+                Blend Art
+            </a>
+            <nav>
+                <a href="#project">Проект</a>
+                <a href="#works">Работы</a>
+                <a href="#contact">Контакты</a>
+            </nav>
+        </div>
+    </header>
 
-  <div class="wrap hero__main">
-    <h1>Делаем мультфильмы в Blender</h1>
-    <p class="lead">Студия 3D-анимации. Сейчас снимаем полнометражный фильм по мотивам башкирского эпоса.</p>
-    <div class="cta">
-      <a class="btn" href="#contact">Обсудить проект</a>
-      <a class="btn btn--ghost" href="#works">Смотреть работы</a>
-    </div>
-  </div>
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-badge">🎬 Студия 3D-анимации</div>
+            <h1>Делаем мультфильмы<br>в <span>Blender</span></h1>
+            <p>Студия 3D-анимации. Сейчас снимаем полнометражный фильм по мотивам башкирского эпоса.</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">Обсудить проект</a>
+                <a href="#works" class="btn btn-outline">Смотреть работы</a>
+            </div>
+            <div class="hero-note">
+                Проект реализован при поддержке Фонда содействия инновациям в рамках программы «Студенческий стартап» мероприятия «Платформа университетского технологического предпринимательства» федерального проекта «Технологии».
+            </div>
+        </div>
+    </section>
 
-  <div class="stage" aria-hidden="true">
-    <div class="blob blob--yellow">
-      <div class="blob__fall"><div class="blob__hop"><div class="blob__body">
-        <div class="eyes"><span class="eye"><i class="pupil"></i></span><span class="eye"><i class="pupil"></i></span></div>
-      </div></div></div>
-      <div class="blob__glow"></div>
-    </div>
-    <div class="blob blob--pink">
-      <div class="blob__fall"><div class="blob__hop"><div class="blob__body">
-        <div class="eyes"><span class="eye"><i class="pupil"></i></span><span class="eye"><i class="pupil"></i></span></div>
-      </div></div></div>
-      <div class="blob__glow"></div>
-    </div>
-    <div class="blob blob--cyan">
-      <div class="blob__fall"><div class="blob__hop"><div class="blob__body">
-        <div class="eyes"><span class="eye"><i class="pupil"></i></span><span class="eye"><i class="pupil"></i></span></div>
-      </div></div></div>
-      <div class="blob__glow"></div>
-    </div>
-  </div>
-</div>
+    <!-- ===== PROJECT ===== -->
+    <section id="project">
+        <div class="container">
+            <h2 class="section-title fade-in">Полнометражный фильм по мотивам башкирского эпоса</h2>
+            <p class="section-subtitle fade-in">Мы создаём анимационный фильм в Blender: от сценария до озвучки.</p>
 
-<div class="support">
-  <div class="wrap">
-    <!-- TODO: положи официальные логотипы в папку assets/ рядом с index.html
-         (скачать можно на сайте Фонда содействия инновациям) и поправь расширения, если это не PNG -->
-    <div class="support__logos">
-      <span><img src="assets/img1.svg" alt="Фонд содействия инновациям"></span>
-      <span><img src="assets/img2.png" alt="Платформа университетского технологического предпринимательства"></span>
-      <!-- Для фото и видео проекта по п. 7.2 договора нужен ещё логотип федерального проекта «Технологии»:
-      <span><img src="assets/logo-tehnologii.png" alt="Федеральный проект «Технологии»"></span> -->
-    </div>
-    <p>Проект реализован при поддержке Фонда содействия инновациям в рамках программы «Студенческий стартап» мероприятия «Платформа университетского технологического предпринимательства» федерального проекта «Технологии».</p>
-  </div>
-</div>
+            <div class="project-grid">
+                <div class="project-image fade-in">
+                    <img src="assets/img2.png" alt="Кадр из мультфильма Blend Art" loading="lazy">
+                </div>
+                <div class="project-facts">
+                    <div class="fact-card fade-in">
+                        <h4>Что это</h4>
+                        <p>Полнометражный 3D-мультфильм по мотивам башкирского эпоса, с собственным дизайном персонажей и локаций.</p>
+                    </div>
+                    <div class="fact-card fade-in">
+                        <h4>Зачем</h4>
+                        <p>Рассказать о башкирском эпосе как о части культурного наследия России и сделать знакомство с национальной мифологией увлекательным.</p>
+                    </div>
+                    <div class="fact-card fade-in">
+                        <h4>Как делаем</h4>
+                        <p>Весь цикл в Blender: предпродакшен, 3D-моделирование, постпродакшен и озвучка.</p>
+                    </div>
+                    <div class="fact-card fade-in">
+                        <h4>Статус</h4>
+                        <p>В производстве.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<main>
-  <section id="project">
-    <div class="wrap">
-      <h2>Полнометражный фильм по мотивам башкирского эпоса</h2>
-      <p class="lead">Мы создаём анимационный фильм в Blender: от сценария до озвучки.</p>
-      <ul class="svc">
-        <li>
-          <h3>Что это</h3>
-          <p>Полнометражный 3D-мультфильм по мотивам башкирского эпоса, с собственным дизайном персонажей и локаций.</p>
-        </li>
-        <li>
-          <h3>Зачем</h3>
-          <p>Рассказать о башкирском эпосе как о части культурного наследия России и сделать знакомство с национальной мифологией увлекательным.</p>
-        </li>
-        <li>
-          <h3>Как делаем</h3>
-          <p>Весь цикл в Blender: предпродакшен, 3D-моделирование, постпродакшен и озвучка.</p>
-        </li>
-        <li>
-          <h3>Статус</h3>
-          <p>В производстве.</p>
-        </li>
-      </ul>
-    </div>
-  </section>
+    <!-- ===== SERVICES ===== -->
+    <section>
+        <div class="container">
+            <h2 class="section-title fade-in">Что мы делаем</h2>
+            <p class="section-subtitle fade-in">Полный цикл 3D-анимации под любые задачи.</p>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">🎥</div>
+                    <h3>Полнометражные мультфильмы</h3>
+                    <p>От сценария и раскадровки до финального рендера и звука.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon"></div>
+                    <h3>Анимация персонажей</h3>
+                    <p>Риггинг, движение, мимика — герои получают характер.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">✨</div>
+                    <h3>Ролики для бренда</h3>
+                    <p>Короткая 3D-анимация для рекламы, презентаций и соцсетей.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="services">
-    <div class="wrap">
-      <h2>Что мы делаем</h2>
-      <ul class="svc">
-        <li>
-          <h3>Полнометражные мультфильмы</h3>
-          <p>От сценария и раскадровки до финального рендера и звука.</p>
-        </li>
-        <li>
-          <h3>Анимация персонажей</h3>
-          <p>Риггинг, движение, мимика — герои получают характер.</p>
-        </li>
-        <li>
-          <h3>Ролики для бренда</h3>
-          <p>Короткая 3D-анимация для рекламы, презентаций и соцсетей.</p>
-        </li>
-      </ul>
-    </div>
-  </section>
+    <!-- ===== WORKS ===== -->
+    <section id="works">
+        <div class="container">
+            <h2 class="section-title fade-in">Кадры и концепты</h2>
+            <p class="section-subtitle fade-in">Реальные кадры из нашего производственного пайплайна.</p>
 
-  <section id="works">
-    <div class="wrap">
-      <div class="works">
-        <figure class="work work--lead">
-            <div class="work__media work__media--a"><img src="assets/personaj.jpg" width="615px" height="600px" alt="Концепт персонажа"></div>
-          <figcaption>
-            <h3>Концепт персонажа</h3>
-            <p>Предпродакшен</p>
-          </figcaption>
-        </figure>
-        <figure class="work">
-        <div class="work__media work__media--a"><img src="assets/location.png" height="250px" alt="Локации"></div>
-          <figcaption>
-            <h3>Локация</h3>
-            <p>3D-моделирование</p>
-          </figcaption>
-        </figure>
-        <figure class="work">
-        <div class="work__media work__media--a"><img src="assets/kadr.jpg" height="250px" width="450px" alt="Раскадровка"></div>
-          <figcaption>
-            <h3>Раскадровка</h3>
-            <p>Предпродакшен</p>
-          </figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
+            <div class="works-grid">
+                <div class="work-item fade-in">
+                    <img src="assets/personaj.jpg" alt="Концепт персонажа" loading="lazy">
+                    <div class="work-caption">
+                        <h3>Концепт персонажа</h3>
+                        <p>Предпродакшен</p>
+                    </div>
+                </div>
+                <div class="work-item fade-in">
+                    <img src="assets/location.png" alt="Локация деревни" loading="lazy">
+                    <div class="work-caption">
+                        <h3>Локация</h3>
+                        <p>3D-моделирование</p>
+                    </div>
+                </div>
+                <div class="work-item fade-in">
+                    <img src="assets/kadr.jpg" alt="Раскадровка сцены" loading="lazy">
+                    <div class="work-caption">
+                        <h3>Раскадровка</h3>
+                        <p>Предпродакшен</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="process">
-    <div class="wrap">
-      <h2>Как создаётся фильм</h2>
-      <ol class="steps">
-        <li><b>1</b><h3>Предпродакшен</h3><p>Сценарий, раскадровки, внешний вид персонажей и локаций.</p></li>
-        <li><b>2</b><h3>Продакшен</h3><p>Моделируем персонажей и локации в Blender, оживляем сцены.</p></li>
-        <li><b>3</b><h3>Постпродакшен</h3><p>Цветокоррекция, композитинг, монтаж.</p></li>
-        <li><b>4</b><h3>Озвучка</h3><p>Записываем голоса и собираем готовый фильм.</p></li>
-      </ol>
-    </div>
-  </section>
+    <!-- ===== PIPELINE ===== -->
+    <section>
+        <div class="container">
+            <h2 class="section-title fade-in">Как создаётся фильм</h2>
+            <p class="section-subtitle fade-in">Четыре этапа от идеи до готового мультфильма.</p>
+            <div class="steps-grid">
+                <div class="step-card fade-in">
+                    <div class="step-num">1</div>
+                    <h3>Предпродакшен</h3>
+                    <p>Сценарий, раскадровки, внешний вид персонажей и локаций.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-num">2</div>
+                    <h3>Продакшен</h3>
+                    <p>Моделируем персонажей и локации в Blender, оживляем сцены.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-num">3</div>
+                    <h3>Постпродакшен</h3>
+                    <p>Цветокоррекция, композитинг, монтаж.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-num">4</div>
+                    <h3>Озвучка</h3>
+                    <p>Записываем голоса и собираем готовый фильм.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="contact" class="contact">
-    <div class="wrap">
-      <h2>Расскажите про вашу идею</h2>
-      <p>Напишите, что хотите снять. Ответим и предложим, как это сделать.</p>
-      <div class="cta">
-        <a class="btn" href="vladu.slav@yandex.ru">Написать на почту</a>
-        <a class="btn btn--ghost" href="https://t.me/Vladislove_8800" target="_blank" rel="noopener">Telegram</a>
-      </div>
-    </div>
-  </section>
-</main>
+    <!-- ===== CONTACT ===== -->
+    <section id="contact">
+        <div class="container">
+            <div class="contact-box fade-in">
+                <h2>Расскажите про вашу идею</h2>
+                <p>Напишите, что хотите снять. Ответим и предложим, как это сделать.</p>
+                <div class="contact-buttons">
+                    <a href="mailto:vladu.slav@yandex.ru" class="btn btn-primary">✉️ Написать на почту</a>
+                    <a href="https://t.me/Vladislove_8800" target="_blank" rel="noopener" class="btn btn-outline">💬 Telegram</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<footer>
-  <div class="wrap">
-    <span>© <span id="year">2026</span> Блендарт</span>
-    <span>Мультфильмы в Blender</span>
-  </div>
-</footer>
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            © 2026 Блендарт · Мультфильмы в Blender
+        </div>
+    </footer>
 
-<script>
-(function () {
-  var y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear();
+    <script>
+        // Плавное появление секций при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.12 });
 
-  // Если файла логотипа нет, показываем заметную подсказку
-  [].slice.call(document.querySelectorAll('.support__logos img')).forEach(function (img) {
-    function miss() {
-      var m = document.createElement('span');
-      m.className = 'logo-missing';
-      m.textContent = 'Нужен файл: ' + img.getAttribute('src');
-      img.replaceWith(m);
-    }
-    if (img.complete && img.naturalWidth === 0) miss();
-    else img.addEventListener('error', miss);
-  });
-
-  // Глаза героев следят за курсором / пальцем
-  var blobs = [].slice.call(document.querySelectorAll('.blob'));
-  var px = 0, py = 0, pending = false;
-  function clamp(v) { return Math.max(-1, Math.min(1, v)); }
-  function update() {
-    pending = false;
-    blobs.forEach(function (b) {
-      var r = b.querySelector('.blob__body').getBoundingClientRect();
-      var cx = r.left + r.width / 2, cy = r.top + r.height * 0.4;
-      b.style.setProperty('--px', clamp((px - cx) / (window.innerWidth * 0.3)).toFixed(2));
-      b.style.setProperty('--py', clamp((py - cy) / (window.innerHeight * 0.3)).toFixed(2));
-    });
-  }
-  window.addEventListener('pointermove', function (e) {
-    px = e.clientX; py = e.clientY;
-    if (!pending) { pending = true; requestAnimationFrame(update); }
-  }, { passive: true });
-})();
-</script>
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
