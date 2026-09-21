@@ -5,19 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blend Art — студия мультфильмов в Blender</title>
     <meta name="description" content="Студия 3D-анимации Blend Art. Полнометражный мультфильм по мотивам башкирского эпоса в Blender.">
-    <link rel="icon" href="assets/img1.svg" type="image/svg+xml">
+    <!-- ИКОНКА САЙТА = ЛОГОТИП BLEND ART -->
+    <link rel="icon" href="assets/logo-blendart.png" type="image/png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #0b0b0e;
-            --bg2: #101014;
-            --card: #15151b;
-            --border: rgba(255, 255, 255, 0.08);
-            --text: #f2f2f2;
-            --muted: #9a9aa5;
-            --accent: #ffc24b;
-            --accent2: #ff7847;
+            --bg: #ffffff;
+            --bg2: #f6f7f9;
+            --card: #ffffff;
+            --border: rgba(0, 0, 0, 0.08);
+            --text: #17181c;
+            --muted: #5c6470;
+            --accent: #f59e0b;
+            --accent-dark: #b45309;
+            --accent2: #ff6b3d;
+            --shadow: 0 10px 34px rgba(20, 22, 30, 0.08);
         }
 
         html { scroll-behavior: smooth; }
@@ -39,7 +42,7 @@
             position: fixed;
             top: 0; left: 0; right: 0;
             z-index: 100;
-            background: rgba(11, 11, 14, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border);
         }
@@ -65,9 +68,10 @@
         }
 
         .logo img {
-            height: 40px;
+            height: 42px;
             width: auto;
             border-radius: 8px;
+            border: 1px solid var(--border);
         }
 
         nav { display: flex; gap: 28px; }
@@ -81,7 +85,7 @@
             position: relative;
         }
 
-        nav a:hover { color: var(--accent); }
+        nav a:hover { color: var(--accent-dark); }
 
         nav a::after {
             content: '';
@@ -108,7 +112,7 @@
             content: '';
             position: absolute;
             width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(255, 194, 75, 0.18), transparent 70%);
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.16), transparent 70%);
             top: -100px; right: -150px;
             pointer-events: none;
         }
@@ -117,7 +121,7 @@
             content: '';
             position: absolute;
             width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(255, 120, 71, 0.12), transparent 70%);
+            background: radial-gradient(circle, rgba(255, 107, 61, 0.12), transparent 70%);
             bottom: -150px; left: -100px;
             pointer-events: none;
         }
@@ -129,9 +133,9 @@
             align-items: center;
             gap: 8px;
             padding: 8px 18px;
-            border: 1px solid rgba(255, 194, 75, 0.35);
-            background: rgba(255, 194, 75, 0.08);
-            color: var(--accent);
+            border: 1px solid rgba(180, 83, 9, 0.35);
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-dark);
             border-radius: 50px;
             font-size: 0.85rem;
             font-weight: 600;
@@ -174,30 +178,45 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            color: #141414;
-            box-shadow: 0 6px 24px rgba(255, 194, 75, 0.25);
+            background: linear-gradient(135deg, #d97706, #ea580c);
+            color: #ffffff;
+            box-shadow: 0 6px 24px rgba(217, 119, 6, 0.3);
         }
 
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 34px rgba(255, 194, 75, 0.4); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 34px rgba(217, 119, 6, 0.45); }
 
         .btn-outline {
-            border: 1px solid var(--border);
+            border: 1px solid rgba(0, 0, 0, 0.15);
             color: var(--text);
-            background: rgba(255, 255, 255, 0.03);
+            background: #ffffff;
         }
 
-        .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent-dark); transform: translateY(-3px); }
 
+        /* Блок поддержки с логотипом Фонда */
         .hero-note {
             margin-top: 48px;
-            padding: 16px 20px;
+            padding: 18px 22px;
             border-left: 3px solid var(--accent);
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 0 10px 10px 0;
+            background: rgba(245, 158, 11, 0.07);
+            border-radius: 0 12px 12px 0;
             color: var(--muted);
-            font-size: 0.85rem;
-            max-width: 700px;
+            font-size: 0.88rem;
+            max-width: 780px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .fond-logo {
+            flex: 0 0 auto;
+            height: 64px;
+            width: auto;
+            background: #ffffff;
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 14px rgba(20, 22, 30, 0.1);
         }
 
         /* ===== SECTIONS ===== */
@@ -226,21 +245,28 @@
             align-items: start;
         }
 
+        /* БОЛЬШОЙ ЛОГОТИП ФОНДА НА БЕЛОМ — ИНВЕСТОРЫ ВИДНЫ! */
         .project-image {
-            border-radius: 18px;
+            background: #ffffff;
             border: 1px solid var(--border);
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-radius: 18px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            text-align: center;
         }
 
         .project-image img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
+            max-height: 420px;
+            object-fit: contain;
+            margin: 0 auto;
         }
 
-        .project-image:hover img { transform: scale(1.04); }
+        .project-image figcaption {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
 
         .project-facts { display: grid; gap: 16px; }
 
@@ -250,12 +276,13 @@
             border-radius: 14px;
             padding: 20px 24px;
             transition: all 0.25s;
+            box-shadow: 0 4px 16px rgba(20, 22, 30, 0.05);
         }
 
-        .fact-card:hover { border-color: rgba(255, 194, 75, 0.4); transform: translateX(6px); }
+        .fact-card:hover { border-color: rgba(245, 158, 11, 0.5); transform: translateX(6px); }
 
         .fact-card h4 {
-            color: var(--accent);
+            color: var(--accent-dark);
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -279,6 +306,7 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 16px rgba(20, 22, 30, 0.05);
         }
 
         .service-card::before {
@@ -294,7 +322,7 @@
 
         .service-card:hover::before { transform: scaleX(1); }
 
-        .service-card:hover { transform: translateY(-6px); border-color: rgba(255, 194, 75, 0.3); }
+        .service-card:hover { transform: translateY(-6px); border-color: rgba(245, 158, 11, 0.4); box-shadow: var(--shadow); }
 
         .service-icon { font-size: 2.4rem; margin-bottom: 16px; }
 
@@ -317,7 +345,8 @@
             border-radius: 18px;
             overflow: hidden;
             border: 1px solid var(--border);
-            background: var(--card);
+            background: #ffffff;
+            box-shadow: 0 4px 16px rgba(20, 22, 30, 0.06);
         }
 
         .work-item:first-child { grid-row: span 2; }
@@ -338,19 +367,19 @@
             position: absolute;
             left: 0; right: 0; bottom: 0;
             padding: 40px 24px 20px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+            color: #ffffff;
         }
 
         .work-caption h3 { font-size: 1.2rem; margin-bottom: 2px; }
 
-        .work-caption p { color: var(--muted); font-size: 0.9rem; }
+        .work-caption p { color: rgba(255, 255, 255, 0.75); font-size: 0.9rem; }
 
         /* ===== PIPELINE ===== */
         .steps-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 24px;
-            counter-reset: step;
         }
 
         .step-card {
@@ -360,9 +389,10 @@
             padding: 30px;
             position: relative;
             transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(20, 22, 30, 0.05);
         }
 
-        .step-card:hover { transform: translateY(-6px); border-color: rgba(255, 194, 75, 0.35); }
+        .step-card:hover { transform: translateY(-6px); border-color: rgba(245, 158, 11, 0.45); box-shadow: var(--shadow); }
 
         .step-num {
             display: inline-flex;
@@ -370,8 +400,8 @@
             justify-content: center;
             width: 46px; height: 46px;
             border-radius: 12px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            color: #141414;
+            background: linear-gradient(135deg, #d97706, #ea580c);
+            color: #ffffff;
             font-weight: 800;
             font-size: 1.3rem;
             margin-bottom: 18px;
@@ -390,13 +420,14 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow);
         }
 
         .contact-box::before {
             content: '';
             position: absolute;
             width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(255, 194, 75, 0.12), transparent 70%);
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.14), transparent 70%);
             top: -200px; left: 50%;
             transform: translateX(-50%);
             pointer-events: none;
@@ -438,6 +469,7 @@
         @media (max-width: 560px) {
             nav { display: none; }
             .hero { padding-top: 110px; }
+            .hero-note { flex-direction: column; align-items: flex-start; gap: 14px; }
         }
     </style>
 </head>
@@ -468,8 +500,10 @@
                 <a href="#contact" class="btn btn-primary">Обсудить проект</a>
                 <a href="#works" class="btn btn-outline">Смотреть работы</a>
             </div>
-            <div class="hero-note">
-                Проект реализован при поддержке Фонда содействия инновациям в рамках программы «Студенческий стартап» мероприятия «Платформа университетского технологического предпринимательства» федерального проекта «Технологии».
+
+            <div class="hero-note fade-in">
+                <img src="assets/img1.svg" alt="Фонд содействия инновациям" class="fond-logo">
+                <p>Проект реализован при поддержке Фонда содействия инновациям в рамках программы «Студенческий стартап» мероприятия «Платформа университетского технологического предпринимательства» федерального проекта «Технологии».</p>
             </div>
         </div>
     </section>
@@ -481,9 +515,12 @@
             <p class="section-subtitle fade-in">Мы создаём анимационный фильм в Blender: от сценария до озвучки.</p>
 
             <div class="project-grid">
-                <div class="project-image fade-in">
-                    <img src="assets/img2.png" alt="Кадр из мультфильма Blend Art" loading="lazy">
-                </div>
+                <!-- БОЛЬШОЙ ЛОГОТИП ФОНДА / ПЛАТФОРМЫ — ТЕПЕРЬ ОТЛИЧНО ВИДЕН НА БЕЛОМ -->
+                <figure class="project-image fade-in">
+                    <img src="assets/img2.png" alt="Логотип Фонда содействия инновациям — Платформа университетского технологического предпринимательства">
+                    <figcaption>Проект поддержан Фондом содействия инновациям и «Платформой университетского технологического предпринимательства»</figcaption>
+                </figure>
+
                 <div class="project-facts">
                     <div class="fact-card fade-in">
                         <h4>Что это</h4>
