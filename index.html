@@ -29,12 +29,14 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--fg);font:400 1rem/1.6 var(--text);-webkit-font-smoothing:antialiased}
 a{color:inherit}
 :focus-visible{outline:2px solid #fff;outline-offset:4px;border-radius:4px}
-.wrap{max-width:1200px;margin:0 auto;padding-inline:var(--pad)}
+.wrap{width:100%;max-width:1200px;margin:0 auto;padding-inline:var(--pad)}
 section{padding-block:clamp(72px,12vw,140px);scroll-margin-top:0}
 
 /* ---------- Шапка ---------- */
 .top{display:flex;justify-content:space-between;align-items:center;padding-block:20px;position:relative;z-index:3}
-.logo{font:700 1rem/1 var(--display);text-decoration:none;letter-spacing:.01em}
+.logo{display:flex;align-items:center;gap:12px;font:700 1rem/1 var(--display);text-decoration:none;letter-spacing:.01em}
+.logo__box{height:44px;padding:8px 12px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
+.logo__box img{height:100%;width:auto;display:block}
 .nav{display:flex;gap:clamp(16px,3vw,32px)}
 .nav a{color:var(--muted);text-decoration:none;font-size:.95rem;transition:color .2s}
 .nav a:hover{color:#fff}
@@ -129,7 +131,7 @@ h2{font:600 clamp(1.5rem,3.6vw,2.4rem)/1.15 var(--display);letter-spacing:-.005e
 .support .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:20px 40px}
 .support__logos{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
 .support__logos > *{background:#fff;border-radius:10px;padding:10px 14px;display:flex;align-items:center;min-height:64px}
-.support__logos img{height:44px;width:auto;display:block}
+.support__logos img{height:80px;width:auto;max-width:100%;display:block}
 .logo-missing{color:#000;font-size:.8rem;border:1px dashed #888;padding:8px 10px;border-radius:6px}
 .support p{flex:1 1 320px;max-width:44em;font-size:.95rem;color:var(--fg)}
 
@@ -190,7 +192,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 
 <div class="hero">
   <header class="wrap top">
-    <a class="logo" href="#">Blend Art</a>
+  <a class="logo" href="#">
+    <span class="logo__box"><img src="assets/logo-blendart.png" alt="Blend Art"></span>
+  </a>
     <nav class="nav" aria-label="Разделы">
       <a href="#project">Проект</a>
       <a href="#works">Работы</a>
@@ -234,8 +238,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     <!-- TODO: положи официальные логотипы в папку assets/ рядом с index.html
          (скачать можно на сайте Фонда содействия инновациям) и поправь расширения, если это не PNG -->
     <div class="support__logos">
-      <span><img src="assets/logo-fond.png" alt="Фонд содействия инновациям"></span>
-      <span><img src="assets/logo-platform.png" alt="Платформа университетского технологического предпринимательства"></span>
+      <span><img src="assets/img1.svg" alt="Фонд содействия инновациям"></span>
+      <span><img src="assets/img2.png" alt="Платформа университетского технологического предпринимательства"></span>
       <!-- Для фото и видео проекта по п. 7.2 договора нужен ещё логотип федерального проекта «Технологии»:
       <span><img src="assets/logo-tehnologii.png" alt="Федеральный проект «Технологии»"></span> -->
     </div>
@@ -272,10 +276,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   <section id="services">
     <div class="wrap">
       <h2>Что мы делаем</h2>
-      <!-- TODO: поправь список под свои услуги -->
       <ul class="svc">
         <li>
-          <h3>Короткометражные мультфильмы</h3>
+          <h3>Полнометражные мультфильмы</h3>
           <p>От сценария и раскадровки до финального рендера и звука.</p>
         </li>
         <li>
@@ -292,26 +295,23 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 
   <section id="works">
     <div class="wrap">
-      <h2>Кадры и концепты</h2>
-      <!-- TODO: замени заглушки на свои кадры и концепты.
-           Внутрь .work__media можно положить <img> или <video> (с классом width/height 100%, object-fit: cover). -->
       <div class="works">
         <figure class="work work--lead">
-          <div class="work__media work__media--a"><span>Здесь будет кадр из мультфильма</span></div>
+            <div class="work__media work__media--a"><img src="assets/personaj.jpg" width="615px" height="600px" alt="Концепт персонажа"></div>
           <figcaption>
             <h3>Концепт персонажа</h3>
             <p>Предпродакшен</p>
           </figcaption>
         </figure>
         <figure class="work">
-          <div class="work__media work__media--b"><span>Здесь будет кадр</span></div>
+        <div class="work__media work__media--a"><img src="assets/location.png" height="250px" alt="Локации"></div>
           <figcaption>
             <h3>Локация</h3>
             <p>3D-моделирование</p>
           </figcaption>
         </figure>
         <figure class="work">
-          <div class="work__media work__media--c"><span>Здесь будет кадр</span></div>
+        <div class="work__media work__media--a"><img src="assets/kadr.jpg" height="250px" width="450px" alt="Раскадровка"></div>
           <figcaption>
             <h3>Раскадровка</h3>
             <p>Предпродакшен</p>
@@ -338,9 +338,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       <h2>Расскажите про вашу идею</h2>
       <p>Напишите, что хотите снять. Ответим и предложим, как это сделать.</p>
       <div class="cta">
-        <!-- TODO: подставь свою почту и ник в Telegram -->
-        <a class="btn" href="mailto:hello@example.com">Написать на почту</a>
-        <a class="btn btn--ghost" href="https://t.me/your_username" target="_blank" rel="noopener">Telegram</a>
+        <a class="btn" href="vladu.slav@yandex.ru">Написать на почту</a>
+        <a class="btn btn--ghost" href="https://t.me/Vladislove_8800" target="_blank" rel="noopener">Telegram</a>
       </div>
     </div>
   </section>
@@ -348,7 +347,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 
 <footer>
   <div class="wrap">
-    <span>© <span id="year">2026</span> Blend Art</span>
+    <span>© <span id="year">2026</span> Блендарт</span>
     <span>Мультфильмы в Blender</span>
   </div>
 </footer>
